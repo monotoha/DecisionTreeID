@@ -6,37 +6,35 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class DecisionTreeID
-{
-	private final List<List<String>> table = new ArrayList<>();
+import org.apache.commons.csv.CSVParser;
 
-	public void learnDT(String ficheroCVS) throws FileNotFoundException
-	{		
+public class DecisionTreeID {
+	private final List<List<String>> table = new ArrayList<>();
+	
+	private CSVParser csvParser;
+
+	public void learnDT(String ficheroCVS) throws FileNotFoundException {
 		Scanner s = new Scanner(new File(ficheroCVS));
-		//Assuming that we aren't going to use the " character
+		// Assuming that we aren't going to use the " character
 		s.useDelimiter(",\\n");
-		while(s.hasNextLine())
-		{
+		while (s.hasNextLine()) {
 			List<String> innerList = new ArrayList<>();
-			
+
 			Scanner scannerLine = new Scanner(s.nextLine());
-			while(scannerLine.hasNext())
-			{
+			while (scannerLine.hasNext()) {
 				innerList.add(scannerLine.next());
 			}
 			table.add(innerList);
 		}
-		
+
 		System.out.println(table);
 	}
 
-	public void drawDecisionTree()
-	{
+	public void drawDecisionTree() {
 
 	}
 
-	public Object prediction(String[] registroCVS)
-	{
+	public Object prediction(String[] registroCVS) {
 		return null;
 	}
 }
