@@ -29,7 +29,8 @@ public class DecisionTreeID
 		
 		System.out.println(table);
 	}
-
+	
+	
 	public void drawDecisionTree()
 	{
 
