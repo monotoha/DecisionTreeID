@@ -3,6 +3,7 @@ package controller;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileNotFoundException;
 
 import javax.swing.JFileChooser;
 
@@ -28,6 +29,12 @@ public class ID3Controller implements ActionListener {
 				File data = window.getFileChooser().getSelectedFile();
 				window.getDirectoryField().setText(data.getPath());
 				window.getMessage().setText("Load succesful.");
+				try {
+					decisionTree.learnDT(data.getPath());
+				} catch (FileNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		}	
 	}	
