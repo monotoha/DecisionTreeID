@@ -10,6 +10,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import com.mxgraph.swing.mxGraphComponent;
+
 public class ID3Window extends JPanel implements ID3View {
 
 	private static final long serialVersionUID = 1L;
@@ -17,12 +19,12 @@ public class ID3Window extends JPanel implements ID3View {
 	/* 
 	 */
 	
+	
 	private JTextField fileDirectory;
 	private JButton openFileButton;
 	private JLabel message;
 	private JFileChooser fc;
 	
-
 	
 	public ID3Window() {
 		fileDirectory = new JTextField(50);
@@ -38,10 +40,14 @@ public class ID3Window extends JPanel implements ID3View {
 		loadPanel.setLayout(new GridLayout(1, 3));
 		loadPanel.add(fileDirectory);
 		loadPanel.add(openFileButton);
-				
+					
 		setLayout(new BorderLayout());
 		add(loadPanel, BorderLayout.NORTH);
 		add(message, BorderLayout.SOUTH);
+	}
+	
+	public void addTree(mxGraphComponent gc) {
+		add(gc, BorderLayout.CENTER);
 	}
 	
 	public JFileChooser getFileChooser() {

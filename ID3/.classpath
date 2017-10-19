@@ -8,5 +8,10 @@
 			<attribute name="javadoc_location" value="file:/C:/Users/James/Documents/GitHub/DecisionTreeID/ID3/external-libraries/commons-csv-1.5/apidocs/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="external-libraries/jgraphx-master/lib/jgraphx.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="file:/home/jamesconnor/GitHub/DecisionTreeID/ID3/external-libraries/jgraphx-master/docs/api/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

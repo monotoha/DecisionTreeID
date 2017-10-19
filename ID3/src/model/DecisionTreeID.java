@@ -17,6 +17,8 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 
+import com.mxgraph.view.mxGraph;
+
 public class DecisionTreeID {
 	private final List<List<String>> table = new ArrayList<>();
 	
@@ -44,8 +46,23 @@ public class DecisionTreeID {
 		}
 	}
 
-	public void drawDecisionTree() {
+	public mxGraph drawDecisionTree() {
+		mxGraph graph = new mxGraph();
+		Object parent = graph.getDefaultParent();
 		
+		graph.getModel().beginUpdate();
+		 try {
+			 Object v1 = graph.insertVertex(parent, null, "Hello", 20, 20, 80, 30);
+			 Object v2 = graph.insertVertex(parent, null, "World!", 240, 150, 80, 30);
+			 Object v3 = graph.insertVertex(parent, null, "This", 500, 150, 80, 30);
+			 graph.insertEdge(parent, null, "Edge", v1, v2);
+			 graph.insertEdge(parent, null, "Edge", v1, v3);
+			 
+		 } finally {
+			 graph.getModel().endUpdate();
+		 }		 
+		
+		 return graph;
 	}
 
 	public Object prediction(String[] registroCVS) {

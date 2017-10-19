@@ -7,6 +7,8 @@ import java.io.FileNotFoundException;
 
 import javax.swing.JFileChooser;
 
+import com.mxgraph.swing.mxGraphComponent;
+
 import model.DecisionTreeID;
 import view.ID3View;
 
@@ -31,6 +33,7 @@ public class ID3Controller implements ActionListener {
 				window.getMessage().setText("Load succesful.");
 				try {
 					decisionTree.learnDT(data.getPath());
+					window.addTree(new mxGraphComponent(decisionTree.drawDecisionTree()));
 				} catch (FileNotFoundException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
