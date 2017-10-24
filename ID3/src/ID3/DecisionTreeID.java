@@ -41,6 +41,9 @@ public class DecisionTreeID
 
 	}
 
+	public double entropy() {
+		return 0;
+	}
 	public Object prediction(String[] registroCVS)
 	{
 		return null;

@@ -11,7 +11,7 @@ import org.junit.Test;
 
 import ID3.DecisionTreeID;
 
-public class DecisionTreeIDTest {
+public class DecisionTreeIDLearnIDTest {
 	
 	@Test(expected = Exception.class)
 	public void testReaderShouldRaiseAnExceptionWhenFormatIsNotCVS() 
@@ -111,7 +111,7 @@ public class DecisionTreeIDTest {
 			list = dt.getTable();
 			assertEquals(list,target);
 		} catch (FileNotFoundException e) {
-			fail("emptyRows.cvs not found.");
+			fail("simpsons.cvs not found.");
 		}
 	}
 	
