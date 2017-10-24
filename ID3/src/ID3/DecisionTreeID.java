@@ -31,6 +31,11 @@ public class DecisionTreeID
 	}
 	
 	
+	public List<List<String>> getTable() {
+		return table;
+	}
+
+
 	public void drawDecisionTree()
 	{
 
@@ -40,4 +45,5 @@ public class DecisionTreeID
 	{
 		return null;
 	}
+	
 }
