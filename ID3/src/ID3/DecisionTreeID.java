@@ -120,7 +120,7 @@ public class DecisionTreeID
 	 */
 	private Double[] gainGivenColumnAndCases(Integer j, boolean[] cases, double entropy) {
 		// TODO Auto-generated method stub
-		return null;
+		return new Double[2];
 	}
 
 	/**
