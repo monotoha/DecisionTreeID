@@ -64,6 +64,10 @@ public class TaggedTree <T> {
 		return this.node.root;
 	}
 	
+	public String toString() {
+		return this.node.toString();
+	}
+	
 	/**
 	 * Raise RuntimeException if Tree is empty or leaf node.
 	 * Should be used to iterate over tree.
@@ -83,6 +87,10 @@ public class TaggedTree <T> {
 		
 		public boolean isLeaf() {
 			return mapEdgeSubTree==null;
+		}
+		public String toString() {
+			StringBuilder sb = new StringBuilder();
+			return sb.append(root).append(", ").append(mapEdgeSubTree).toString();
 		}
 	}
 	
