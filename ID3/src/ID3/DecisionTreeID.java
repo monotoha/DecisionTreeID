@@ -16,7 +16,10 @@ import java.util.stream.IntStream;
 public class DecisionTreeID
 {
 	private TaggedTree<String> model;
-	private final List<List<String>> table = new ArrayList<>();
+	/**
+	 * table: FIRST ROW HEADERS, LAST COLUMN TARGET VALUES
+	 */
+	private final List<List<String>> table = new ArrayList<>(); 
 	private Map<String, Set<String>> correspondenceVariable_Values; // An auxiliar variable
 	private final static Comparator<Double[]> comparatorGain = 
 			(m1,m2) -> m1[0].compareTo(m2[0]);
@@ -82,16 +85,15 @@ public class DecisionTreeID
 			sons = new HashMap<>();
 			newAttributes = Arrays.copyOf(attributes,attributes.length);
 			newAttributes[indexNodeMaxGain] = true;
-			values
-			.forEach(i -> sons.put(i, buildID3Tree(newCases(i,indexNodeMaxGain,cases),newAttributes)));
+			values.forEach(i -> sons.put(i, buildID3Tree(newCases(i,indexNodeMaxGain,cases.length),newAttributes)));
 			t = new TaggedTree<>(rootNodeValue,sons);
 		}
 		return t;
 	}
 	
-	private boolean[] newCases(String value,int j, boolean[] cases) {
-		boolean[] res = new boolean[cases.length];
-		IntStream.range(0, this.table.size())
+	private boolean[] newCases(String value,int j, int numCases) {
+		boolean[] res = new boolean[numCases];
+		IntStream.range(1, this.table.size())
 		.forEach(i -> res[i] = !this.table.get(i).get(j).equals(value));
 		return res;
 	}
@@ -148,7 +150,10 @@ public class DecisionTreeID
 	 * @return List formed by last column of the table.
 	 */
 	private List<String> getTargetColumn() {
-		return this.table.get(this.table.size()-1);
+		return IntStream.range(0, this.table.size())
+				.boxed()
+				.map(i -> this.table.get(i).get(this.table.size() -1))
+				.collect(Collectors.toList());
 	}
 	/**
 	 * Get the node value of the tree if it is a leaf node.
@@ -158,7 +163,7 @@ public class DecisionTreeID
 	 */
 	private String leafNode(boolean[] cases) {
 		List<String> target = getTargetColumn();
-		List<String> nodes = IntStream.range(0,target.size())
+		List<String> nodes = IntStream.range(1,target.size())
 				.boxed()
 				.filter(i -> !cases[i])
 				.map(i -> target.get(i))
