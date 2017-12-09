@@ -41,6 +41,10 @@ public class DecisionTreeID {
 			System.out.println("IOException");
 		}
 	}
+	
+	public List<List<String>> getTable() {
+		return table;
+	}
 
 	public mxGraph drawDecisionTree() {
 		mxGraph graph = new mxGraph();
