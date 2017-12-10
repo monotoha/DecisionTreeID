@@ -1,5 +1,4 @@
 package test;
-
 import static org.junit.Assert.*;
 
 import java.io.FileNotFoundException;
@@ -9,7 +8,7 @@ import java.util.stream.Collectors;
 
 import org.junit.Test;
 
-import ID3.DecisionTreeID;
+import model.DecisionTreeID;
 
 public class DecisionTreeIDLearnIDTest {
 	
@@ -90,7 +89,7 @@ public class DecisionTreeIDLearnIDTest {
 		DecisionTreeID dt = new DecisionTreeID();
 		String[][] caseSimpsons = 
 			{
-					{"Personaje","Longitud Pelo","Peso", "Edad", "Género"},
+					{"Personaje","Longitud Pelo","Peso", "Edad", "Gï¿½nero"},
 					{"Homer","Menor 5'","Mayor 160 lbs", "Menor 40", "H"},
 					{"Marge","Mayor 5'","Menor 160 lbs", "Menor 40", "M"},
 					{"Bart", "Menor 5","Menor 160 lbs", "Menor 40", "H"},
