@@ -7,7 +7,7 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import ID3.TaggedTree;
+import model.TaggedTree;
 
 public class TaggedTreeTest {
 

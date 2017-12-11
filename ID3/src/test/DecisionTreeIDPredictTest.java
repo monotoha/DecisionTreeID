@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 import org.junit.Test;
 
-import ID3.DecisionTreeID;
+import model.DecisionTreeID;
 
 public class DecisionTreeIDPredictTest {
 
