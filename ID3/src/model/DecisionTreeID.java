@@ -236,4 +236,124 @@ public class DecisionTreeID {
 	public Object prediction(String[] registroCVS) {
 		return null;
 	}
+    private int ganancia(boolean[] row,boolean[] col,int res)
+    {
+        int[] ganancias = new int[col.length];
+        int[] classAmount;
+        List<String> valuesRes = values(res,row);
+        int entropiaRes = entropiaRes(res,row,valuesRes);
+        List<String> values;
+        for(int i=0;i<col.length;i++)
+        {
+            values = values(i,row);
+            int total=0;
+            ganancias[i] = entropiaRes;
+            if(i!=res)
+            {
+                
+                
+                classAmount = new int[values.size()+1];
+                
+                for(int j=0;j<row.length;j++)
+                    if(!row[j])
+                    {
+                        classAmount[values.indexOf(table.get(j).get(i))]++;
+                        total++;
+                    }       
+                int[] entropia = entropia(res,i,row,valuesRes);
+                for(int j =0;j<entropia.length;j++)
+                {
+                    ganancias[i]-=(classAmount[j]/total)*entropia[j];
+                }
+                
+            }
+        }
+        int index =0;
+        int max=0;
+        for(int i=0;i<ganancias.length;i++)
+        {
+            if(ganancias[i]>max)
+            {
+                max=ganancias[i];
+                index = i;
+            }
+        }
+        
+        return index;
+    }
+    
+    private List<String> values(int col,boolean[] row)
+    {
+        List<String> values =new ArrayList<>();
+        for(int j=0;j<row.length;j++)
+            if(!values.contains(table.get(j).get(col)) && !row[j])
+            {
+                values.add(table.get(j).get(col));
+            }
+        return values;
+    }
+    
+    
+    
+    private int entropiaRes(int col,boolean[] row,List<String> values)
+    {
+        int entropia =0;
+        int total = 0;
+        int[] classAmount;
+        
+        classAmount = new int[values.size()+1];
+        
+        for(int j=0;j<row.length;j++)
+            if(!row[j])
+            {
+                classAmount[values.indexOf(table.get(j).get(col))]++;
+                total++;
+            }
+        for(int j=0;j<classAmount.length;j++)
+        {
+            try
+            {
+                entropia-=(classAmount[j]/total)*Math.log(classAmount[j]/total);
+            }
+            catch(Exception e)
+            {
+                entropia -= 0;
+            }
+        }
+        return entropia;
+    }
+    
+    private int[] entropia(int colRes,int col,boolean[] row,List<String> valuesRes)
+    {
+        List<String> values = values(col,row);
+        int[] entropia=new int[values.size()+1];
+        int[] total =new int[values.size()+1];
+        int[][] classAmount = new int[values.size()+1][valuesRes.size()+1];
+        for(int j=0;j<row.length;j++)
+        {
+            if(!row[j])
+            {
+                classAmount[values.indexOf(table.get(j).get(col))][valuesRes.indexOf(table.get(j).get(colRes))]++;
+                total[values.indexOf(table.get(j).get(col))]++;
+            }
+        }
+        
+        for(int i=0; i<classAmount.length;i++)
+        {
+            for(int j=0;j<classAmount[0].length;j++)
+            {   
+                try
+                {
+                    entropia[i]-=(classAmount[i][j]/total[i])*Math.log(classAmount[i][j]/total[i]);
+                }
+                catch(Exception e)
+                {
+                    entropia[i]-=0;
+                }
+            }
+        }
+        
+        
+        return entropia;
+    }
 }
