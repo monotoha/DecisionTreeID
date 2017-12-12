@@ -43,6 +43,8 @@ public class TaggedTree <T> {
 		node.root = root;
 		node.mapEdgeSubTree = mapEdgeSubTree != null && !mapEdgeSubTree.isEmpty()?
 				mapEdgeSubTree : null;
+		node.setHeight();
+		node.setDepth(0);
 	}
 	
 	/**
@@ -89,6 +91,28 @@ public class TaggedTree <T> {
 		return this.node.mapEdgeSubTree;
 	}
 	
+	/**
+	 * 
+	 * @return Max of number of levels under current node + 1. 
+	 */
+	public int getNodeWidth() {
+		if (isEmpty()) {
+			throw new RuntimeException("Empty node does not have depth.");
+		}
+		return this.node.height;
+	}
+	
+	/**
+	 * 
+	 * @return Depth of current node. 0 if root.
+	 */
+	public int getNodeDepth() {
+		if (isEmpty()) {
+			throw new RuntimeException("Empty node does not have depth.");
+		}
+		return this.node.depth;
+	}
+	
 	public boolean equals(Object o) {
 		boolean res = o instanceof TaggedTree<?>;
 		if (res) {
@@ -102,10 +126,27 @@ public class TaggedTree <T> {
 	private static class Node<B> {
 		B root;
 		Map<String,TaggedTree<B>> mapEdgeSubTree;
+		int height,depth;
 		
 		public boolean isLeaf() {
 			return mapEdgeSubTree==null;
 		}
+		
+		public void setHeight() {
+			height = this.mapEdgeSubTree==null?
+					0:
+					this.mapEdgeSubTree.values().stream()
+					.map(i -> i.node.height).mapToInt(Integer::intValue)
+					.max().getAsInt() + 1;
+		}
+		
+		public void setDepth(int val) {
+			depth = val;
+			if (this.mapEdgeSubTree!=null) {
+				this.mapEdgeSubTree.values().forEach(i-> i.node.setDepth(val+1));
+			}
+		}
+		
 		public String toString() {
 			StringBuilder sb = new StringBuilder();
 			return sb.append(root).append(", ").append(mapEdgeSubTree).toString();
