@@ -32,7 +32,7 @@ public class ID3Controller implements ActionListener {
 				window.getDirectoryField().setText(data.getPath());
 				window.getMessage().setText("Load succesful.");
 				try {
-					decisionTree.readCSV(data.getPath());
+					decisionTree.learnID3(data.getPath());
 					window.addTree(new mxGraphComponent(decisionTree.drawDecisionTree()));
 				} catch (FileNotFoundException e1) {
 					// TODO Auto-generated catch block
