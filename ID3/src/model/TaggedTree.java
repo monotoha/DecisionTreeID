@@ -72,7 +72,8 @@ public class TaggedTree <T> {
 	}
 	
 	public String toString() {
-		return this.node.toString();
+		StringBuilder sb = new StringBuilder();
+		return sb.append("Tree(").append(this.node.toString()).append(")").toString();
 	}
 	
 	/**
@@ -88,6 +89,16 @@ public class TaggedTree <T> {
 		return this.node.mapEdgeSubTree;
 	}
 	
+	public boolean equals(Object o) {
+		boolean res = o instanceof TaggedTree<?>;
+		if (res) {
+			TaggedTree<T> t = (TaggedTree<T>) o;
+			res = t.isEmpty() && this.isEmpty() || this.node.equals(t.node);
+		}
+		return res;
+	}
+	
+	
 	private static class Node<B> {
 		B root;
 		Map<String,TaggedTree<B>> mapEdgeSubTree;
@@ -98,6 +109,18 @@ public class TaggedTree <T> {
 		public String toString() {
 			StringBuilder sb = new StringBuilder();
 			return sb.append(root).append(", ").append(mapEdgeSubTree).toString();
+		}
+		public boolean equals(Object o) {
+			boolean res = o instanceof Node<?>;
+			if (res) {
+				Node<B> node = (Node<B>) o;
+				res = this.isLeaf() && node.isLeaf()
+								||
+								!this.isLeaf() && !node.isLeaf() 
+								&& this.mapEdgeSubTree.equals(node.mapEdgeSubTree);
+				res = res && this.root.equals(node.root);
+			}
+			return res;
 		}
 	}
 	

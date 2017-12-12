@@ -10,35 +10,43 @@ import org.junit.Test;
 
 import model.DecisionTreeID;
 
-public class DecisionTreeIDLearnIDTest {
-	
+public class DecisionTreeIDCSVReaderTest {
+	private final static String directory = "csv-files/";
 	@Test(expected = Exception.class)
 	public void testReaderShouldRaiseAnExceptionWhenFormatIsNotCVS() 
 			throws FileNotFoundException {
 		DecisionTreeID dt = new DecisionTreeID();
-		dt.learnDT("title");
+		dt.readCSV("title");
 		
 	}
 	@Test(expected = Exception.class)
-	public void testReaderShouldRaiseAnExceptionWhenCVSIsNotFound() 
+	public void testReaderShouldRaiseAnExceptionWhenCSVIsNotFound() 
 			throws FileNotFoundException {
 		DecisionTreeID dt = new DecisionTreeID();
-		dt.learnDT("WhereIsIt?.cvs");
+		dt.readCSV("WhereIsIt?.csv");
 		
 	}
 	
 	@Test(expected = Exception.class)
-	public void testReaderShouldRaiseAnExceptionWhenEmptyCVS() 
-			throws FileNotFoundException {
+	public void testReaderShouldRaiseAnExceptionWhenEmptyCSV() 
+			 {
 		DecisionTreeID dt = new DecisionTreeID();
-		dt.learnDT("Empty.cvs");
+		try {
+			dt.readCSV(directory+"Empty.csv");
+		} catch (FileNotFoundException e) {
+			fail("Empty.csv not found.");
+		}
 	}
 	
 	@Test(expected = Exception.class)
-	public void testReaderShouldRaiseAnExceptionWhenUniqueColumnCVS() 
+	public void testReaderShouldRaiseAnExceptionWhenUniqueColumnCSV() 
 			throws FileNotFoundException {
 		DecisionTreeID dt = new DecisionTreeID();
-		dt.learnDT("OneCol.cvs");
+		try {
+			dt.readCSV(directory+"OneCol.csv");
+		} catch (FileNotFoundException e) {
+			fail("OneCol.csv not found.");
+		}
 	}
 	
 	@Test
@@ -51,11 +59,11 @@ public class DecisionTreeIDLearnIDTest {
 				.map(p -> Arrays.asList(p))
 				.collect(Collectors.toList());
 		try {
-			dt.learnDT("emptyRows.cvs");
+			dt.readCSV(directory+"emptyRows.csv");
 			list = dt.getTable();
 			assertEquals(list,target);
 		} catch (FileNotFoundException e) {
-			fail("emptyRows.cvs not found.");
+			fail("emptyRows.csv not found.");
 		}
 	}
 	
@@ -69,11 +77,11 @@ public class DecisionTreeIDLearnIDTest {
 				.map(p -> Arrays.asList(p))
 				.collect(Collectors.toList());
 		try {
-			dt.learnDT("uncompleteLine.cvs");
+			dt.readCSV(directory+"uncompleteLine.csv");
 			list = dt.getTable();
 			assertEquals(list,target);
 		} catch (FileNotFoundException e) {
-			fail("emptyRows.cvs not found.");
+			fail("uncompleteLine.csv not found.");
 		}
 	}
 	
@@ -89,16 +97,16 @@ public class DecisionTreeIDLearnIDTest {
 		DecisionTreeID dt = new DecisionTreeID();
 		String[][] caseSimpsons = 
 			{
-					{"Personaje","Longitud Pelo","Peso", "Edad", "G�nero"},
-					{"Homer","Menor 5'","Mayor 160 lbs", "Menor 40", "H"},
-					{"Marge","Mayor 5'","Menor 160 lbs", "Menor 40", "M"},
-					{"Bart", "Menor 5","Menor 160 lbs", "Menor 40", "H"},
-					{"Lisa", "Mayor 5","Menor 160 lbs", "Menor 40", "M"},
-					{"Maggie", "Menor 5","Menor 160 lbs", "Menor 40", "M"},
-					{"Abe","Menor 5'","Mayor 160 lbs", "Mayor 40", "H"},
-					{"Selma","Mayor 5'","Menor 160 lbs", "Mayor 40", "M"},
-					{"Otto","Mayor 5'","Mayor 160 lbs", "Menor 40", "H"},
-					{"Krusty","Mayor 5'","Mayor 160 lbs", "Mayor 40", "H"}
+					{"Longitud Pelo","Peso", "Edad", "Genero"},
+					{"Menor 5","Mayor 160 lbs", "Menor 40", "H"},
+					{"Mayor 5","Menor 160 lbs", "Menor 40", "M"},
+					{"Menor 5","Menor 160 lbs", "Menor 40", "H"},
+					{"Mayor 5","Menor 160 lbs", "Menor 40", "M"},
+					{"Menor 5","Menor 160 lbs", "Menor 40", "M"},
+					{"Menor 5","Mayor 160 lbs", "Mayor 40", "H"},
+					{"Mayor 5","Menor 160 lbs", "Mayor 40", "M"},
+					{"Mayor 5","Mayor 160 lbs", "Menor 40", "H"},
+					{"Mayor 5","Mayor 160 lbs", "Mayor 40", "H"}
 			};
 		
 		List<List<String>> list;
@@ -106,11 +114,11 @@ public class DecisionTreeIDLearnIDTest {
 				.map(p -> Arrays.asList(p))
 				.collect(Collectors.toList());
 		try {
-			dt.learnDT("simpsons.cvs");
+			dt.readCSV(directory+"simpsons.csv");
 			list = dt.getTable();
 			assertEquals(list,target);
 		} catch (FileNotFoundException e) {
-			fail("simpsons.cvs not found.");
+			fail("simpsons.csv not found.");
 		}
 	}
 	
@@ -119,21 +127,21 @@ public class DecisionTreeIDLearnIDTest {
 		DecisionTreeID dt = new DecisionTreeID();
 		String[][] casePlayTennis = 
 			{
-					{"Day","Outlook","Temperature", "Humidity", "Wind","PlayTennis"},
-					{"D1","Sunny","Hot", "High", "Weak", "No"},
-					{"D2","Sunny","Hot", "High", "Strong", "No"},
-					{"D3","Overcast","Hot", "High", "Weak", "Yes"},
-					{"D4", "Rain","Mild", "High", "Weak", "Yes"},
-					{"D5", "Rain","Cool", "Normal", "Weak", "Yes"},
-					{"D6", "Rain","Cool", "Normal", "Strong", "No"},
-					{"D7", "Overcast","Cool", "Normal", "Strong", "Yes"},
-					{"D8","Sunny","Mild", "High", "Weak","No"},
-					{"D9","Sunny","Cool", "Normal", "Weak","Yes"},
-					{"D10","Rain","Mild", "Normal", "Weak","Yes"},
-					{"D11","Sunny","Mild", "Normal", "Strong","Yes"},
-					{"D12","Overcast","Mild", "High", "Strong","Yes"},
-					{"D13","Overcast","Hot", "Normal", "Weak","Yes"},
-					{"D14","Rain","Mild", "High", "Strong","No"}
+					{"Outlook","Temperature", "Humidity", "Wind","PlayTennis"},
+					{"Sunny","Hot", "High", "Weak", "No"},
+					{"Sunny","Hot", "High", "Strong", "No"},
+					{"Overcast","Hot", "High", "Weak", "Yes"},
+					{"Rain","Mild", "High", "Weak", "Yes"},
+					{"Rain","Cool", "Normal", "Weak", "Yes"},
+					{ "Rain","Cool", "Normal", "Strong", "No"},
+					{"Overcast","Cool", "Normal", "Strong", "Yes"},
+					{"Sunny","Mild", "High", "Weak","No"},
+					{"Sunny","Cool", "Normal", "Weak","Yes"},
+					{"Rain","Mild", "Normal", "Weak","Yes"},
+					{"Sunny","Mild", "Normal", "Strong","Yes"},
+					{"Overcast","Mild", "High", "Strong","Yes"},
+					{"Overcast","Hot", "Normal", "Weak","Yes"},
+					{"Rain","Mild", "High", "Strong","No"}
 			};
 		
 		List<List<String>> list;
@@ -141,11 +149,11 @@ public class DecisionTreeIDLearnIDTest {
 				.map(p -> Arrays.asList(p))
 				.collect(Collectors.toList());
 		try {
-			dt.learnDT("simpsons.cvs");
+			dt.readCSV(directory+"Tennis.csv");
 			list = dt.getTable();
 			assertEquals(list,target);
 		} catch (FileNotFoundException e) {
-			fail("emptyRows.cvs not found.");
+			fail("Tennis.csv not found.");
 		}
 	}
 	

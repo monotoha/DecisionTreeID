@@ -14,36 +14,36 @@ import model.DecisionTreeID;
 public class DecisionTreeIDPredictTest {
 
 	@Test(expected = Exception.class)
-	public void testPredictRaisesAnExceptionShouldSizeWasInferiorThanTableSizeMinusOne() {
-		String[] comicWithoutLong = {"Comic", "Mayor 160 lbs","Menor 40"};
+	public void testPredictRaisesAnExceptionShouldSizeWereInferiorThanTableSizeMinusOne() {
+		String[] comicWithoutLong = {"Mayor 160 lbs","Menor 40"};
 		String target = "H";
 		DecisionTreeID dt = new DecisionTreeID();
 		try {
-			dt.learnDT("simpsons.cvs");
+			dt.readCSV("csv-files/simpsons.cvs");
 			assertEquals(dt.prediction(comicWithoutLong),target);
 		} catch (FileNotFoundException e) {
 			fail("simpsons.cvs not found.");
 		}
 	}
 	@Test
-	public void testPredictShouldPredictIgnoringLastColumnIfSizeWasEqualsThanTableSize() {
-		String[] comicWithoutLong = {"Comic", "Mayor 5'", "Mayor 160 lbs","Menor 40","H"};
+	public void testPredictShouldPredictIgnoringLastColumnIfSizeWereEqualsThanTableSize() {
+		String[] comicWithoutLong = {"Mayor 5", "Mayor 160 lbs","Menor 40","H"};
 		String target = "H";
 		DecisionTreeID dt = new DecisionTreeID();
 		try {
-			dt.learnDT("simpsons.cvs");
+			dt.readCSV("csv-files/simpsons.cvs");
 			assertEquals(dt.prediction(comicWithoutLong),target);
 		} catch (FileNotFoundException e) {
 			fail("simpsons.cvs not found.");
 		}
 	}
 	@Test(expected = Exception.class)
-	public void testPredictRaisesAnExceptionShouldAValueWasNotPresentInPredictor() {
-		String[] comicWithoutLong = {"Comic", "Uy que raro xD", "Mayor 160 lbs","Menor 40"};
+	public void testPredictRaisesAnExceptionShouldAValueWereNotPresentInPredictor() {
+		String[] comicWithoutLong = {"Uy que raro xD", "Mayor 160 lbs","Menor 40"};
 		String target = "H";
 		DecisionTreeID dt = new DecisionTreeID();
 		try {
-			dt.learnDT("simpsons.cvs");
+			dt.readCSV("csv-files/simpsons.cvs");
 			assertEquals(dt.prediction(comicWithoutLong),target);
 		} catch (FileNotFoundException e) {
 			fail("simpsons.cvs not found.");
@@ -51,11 +51,11 @@ public class DecisionTreeIDPredictTest {
 	}
 	@Test
 	public void testPredictShouldPredictCorrectlySimpsonsCase() {
-		String[] comic = {"Comic", "Mayor 5'", "Mayor 160 lbs","Menor 40"};
+		String[] comic = {"Mayor 5", "Mayor 160 lbs","Menor 40"};
 		String target = "H";
 		DecisionTreeID dt = new DecisionTreeID();
 		try {
-			dt.learnDT("simpsons.cvs");
+			dt.readCSV("csv-files/simpsons.cvs");
 			assertEquals(dt.prediction(comic),target);
 		} catch (FileNotFoundException e) {
 			fail("simpsons.cvs not found.");

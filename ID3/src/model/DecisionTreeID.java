@@ -33,8 +33,12 @@ public class DecisionTreeID {
 			(m1,m2) -> m1[0].compareTo(m2[0]);
 	CSVParser parser;
 
-	public void learnDT(String ficheroCSV) throws FileNotFoundException {
-
+	public void learnID3(String ficheroCSV) throws FileNotFoundException {
+		this.readCSV(ficheroCSV);
+		this.model = buildID3Tree();
+	}
+	
+	public void readCSV(String ficheroCSV) throws FileNotFoundException {
 		Reader reader = new BufferedReader(new FileReader(ficheroCSV));
 
 		try {
@@ -48,16 +52,15 @@ public class DecisionTreeID {
 				});
 				table.add(row);
 			}
-			this.model = buildID3Tree();
 		} catch (IOException e) {
 			System.out.println("IOException");
 		}
 	}
 	
-	
 	private TaggedTree<String> buildID3Tree() {
 		boolean[] cases = new boolean[table.size()];
 		boolean[] attributes = new boolean[table.get(0).size()];
+		cases[0] = true;
 		this.correspondenceVariable_Values = new HashMap<String,Set<String>>();
 		IntStream.range(0, this.table.get(0).size())
 		.forEach(
@@ -69,7 +72,7 @@ public class DecisionTreeID {
 
 
 	private Set<String> getValuesGivenColumn(Integer j) {
-		return IntStream.range(0, this.table.size())
+		return IntStream.range(1, this.table.size())
 				.boxed()
 				.map(i -> this.table.get(i).get(j))
 				.collect(Collectors.toSet());
@@ -103,19 +106,21 @@ public class DecisionTreeID {
 		boolean[] res = Arrays.copyOf(cases, cases.length);
 		IntStream.range(1, this.table.size())
 		.forEach(i -> res[i] = res[i] || !this.table.get(i).get(j).equals(value));
+		// FALLA
 		return res;
 	}
 
 
 	private int getIndexMaxGain(boolean[] cases, boolean[] attributes) {
-		double entropy = entropy(cases);
+		/*double entropy = entropy(cases);
 		return IntStream.range(0, table.get(0).size() - 1)
 		.boxed()
 		.filter(j -> !attributes[j])
 		.map(j -> gainGivenColumnAndCases(j,cases,entropy))
 		.max(comparatorGain)
 		.get() // if not present throws NoSuchElementException
-		[1].intValue();
+		[1].intValue();*/
+		return ganancia(cases,attributes,this.table.get(0).size()-1);
 	}
 	
 	/**
@@ -160,10 +165,10 @@ public class DecisionTreeID {
 	 * 
 	 * @return List formed by last column of the table.
 	 */
-	private List<String> getTargetColumn() {
+	public List<String> getTargetColumn() {
 		return IntStream.range(0, this.table.size())
 				.boxed()
-				.map(i -> this.table.get(i).get(this.table.size() -1))
+				.map(i -> this.table.get(i).get(this.table.get(i).size() -1))
 				.collect(Collectors.toList());
 	}
 	/**
@@ -180,7 +185,7 @@ public class DecisionTreeID {
 	 */
 	private String leafNode(boolean[] cases, boolean[] attributes) {
 		Map<String, Integer> occurrences = new HashMap<>();
-		boolean isLeaf = false;
+		boolean isLeaf = true;
 		String current;
 		List<String> target = getTargetColumn();
 		Iterator<String> iter = IntStream.range(1, target.size())
@@ -213,7 +218,9 @@ public class DecisionTreeID {
 	public List<List<String>> getTable() {
 		return table;
 	}
-
+	public TaggedTree<String> getModel() {
+		return this.model;
+	}
 	public mxGraph drawDecisionTree() {
 		mxGraph graph = new mxGraph();
 		Object parent = graph.getDefaultParent();
@@ -236,23 +243,23 @@ public class DecisionTreeID {
 	public Object prediction(String[] registroCVS) {
 		return null;
 	}
-    private int ganancia(boolean[] row,boolean[] col,int res)
+    public int ganancia(boolean[] row,boolean[] col,int res)
     {
-        int[] ganancias = new int[col.length];
-        int[] classAmount;
+        double[] ganancias = new double[col.length];
+        double[] classAmount;
         List<String> valuesRes = values(res,row);
-        int entropiaRes = entropiaRes(res,row,valuesRes);
+        double entropiaRes = entropiaRes(res,row,valuesRes);
         List<String> values;
         for(int i=0;i<col.length;i++)
         {
             values = values(i,row);
-            int total=0;
+            double total=0;
             ganancias[i] = entropiaRes;
             if(i!=res)
             {
                 
                 
-                classAmount = new int[values.size()+1];
+                classAmount = new double[values.size()+1];
                 
                 for(int j=0;j<row.length;j++)
                     if(!row[j])
@@ -260,7 +267,7 @@ public class DecisionTreeID {
                         classAmount[values.indexOf(table.get(j).get(i))]++;
                         total++;
                     }       
-                int[] entropia = entropia(res,i,row,valuesRes);
+                double[] entropia = entropia(res,i,row,valuesRes);
                 for(int j =0;j<entropia.length;j++)
                 {
                     ganancias[i]-=(classAmount[j]/total)*entropia[j];
@@ -269,10 +276,10 @@ public class DecisionTreeID {
             }
         }
         int index =0;
-        int max=0;
+        double max=0;
         for(int i=0;i<ganancias.length;i++)
         {
-            if(ganancias[i]>max)
+            if(ganancias[i]>max && i != res)
             {
                 max=ganancias[i];
                 index = i;
@@ -286,22 +293,25 @@ public class DecisionTreeID {
     {
         List<String> values =new ArrayList<>();
         for(int j=0;j<row.length;j++)
+        {
             if(!values.contains(table.get(j).get(col)) && !row[j])
             {
                 values.add(table.get(j).get(col));
             }
+            
+        }
         return values;
     }
     
     
     
-    private int entropiaRes(int col,boolean[] row,List<String> values)
+    public double entropiaRes(int col,boolean[] row,List<String> values)
     {
-        int entropia =0;
-        int total = 0;
-        int[] classAmount;
+        double entropia =0;
+        double total = 0;
+        double[] classAmount;
         
-        classAmount = new int[values.size()+1];
+        classAmount = new double[values.size()];
         
         for(int j=0;j<row.length;j++)
             if(!row[j])
@@ -314,6 +324,7 @@ public class DecisionTreeID {
             try
             {
                 entropia-=(classAmount[j]/total)*Math.log(classAmount[j]/total);
+             // el logaritmo tiene que ser base 2, no e. TODO
             }
             catch(Exception e)
             {
@@ -323,12 +334,13 @@ public class DecisionTreeID {
         return entropia;
     }
     
-    private int[] entropia(int colRes,int col,boolean[] row,List<String> valuesRes)
+    
+    public double[] entropia(int colRes,int col,boolean[] row,List<String> valuesRes)
     {
         List<String> values = values(col,row);
-        int[] entropia=new int[values.size()+1];
-        int[] total =new int[values.size()+1];
-        int[][] classAmount = new int[values.size()+1][valuesRes.size()+1];
+        double[] entropia=new double[values.size()];
+        double[] total =new double[values.size()];
+        double[][] classAmount = new double[values.size()][valuesRes.size()];
         for(int j=0;j<row.length;j++)
         {
             if(!row[j])
@@ -345,6 +357,7 @@ public class DecisionTreeID {
                 try
                 {
                     entropia[i]-=(classAmount[i][j]/total[i])*Math.log(classAmount[i][j]/total[i]);
+                    // el logaritmo tiene que ser en base 2, no e. TODO
                 }
                 catch(Exception e)
                 {
