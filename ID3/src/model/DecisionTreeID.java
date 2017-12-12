@@ -289,12 +289,12 @@ public class DecisionTreeID {
         return index;
     }
     
-    private List<String> values(int col,boolean[] row)
+    public List<String> values(int col,boolean[] row)
     {
         List<String> values =new ArrayList<>();
         for(int j=0;j<row.length;j++)
         {
-            if(!values.contains(table.get(j).get(col)) && !row[j])
+            if(!values.contains(table.get(j).get(col)) && !row[j] && j!=0)
             {
                 values.add(table.get(j).get(col));
             }
@@ -321,15 +321,11 @@ public class DecisionTreeID {
             }
         for(int j=0;j<classAmount.length;j++)
         {
-            try
-            {
-                entropia-=(classAmount[j]/total)*Math.log(classAmount[j]/total);
+            if(classAmount[j]>0)
+                entropia-=(classAmount[j]/total)*(Math.log(classAmount[j]/total)/Math.log(2));
+            else
+            	entropia-=0;
              // el logaritmo tiene que ser base 2, no e. TODO
-            }
-            catch(Exception e)
-            {
-                entropia -= 0;
-            }
         }
         return entropia;
     }
@@ -354,15 +350,12 @@ public class DecisionTreeID {
         {
             for(int j=0;j<classAmount[0].length;j++)
             {   
-                try
-                {
-                    entropia[i]-=(classAmount[i][j]/total[i])*Math.log(classAmount[i][j]/total[i]);
+                if(classAmount[i][j]>0)
+                    entropia[i]-=(classAmount[i][j]/total[i])*(Math.log(classAmount[i][j]/total[i])/Math.log(2));
+                else
+                	entropia[i]-=0;
                     // el logaritmo tiene que ser en base 2, no e. TODO
-                }
-                catch(Exception e)
-                {
-                    entropia[i]-=0;
-                }
+                
             }
         }
         

@@ -18,7 +18,7 @@ public class DecisionTreeIDEntropyTest {
 		List<List<String>> list = t.getTable();
 		boolean[] row = new boolean[list.size()];
 		row[0] = true;
-		double val = t.entropiaRes(list.get(0).size()-1, row, t.getTargetColumn());
+		double val = t.entropiaRes(list.get(0).size()-1, row, t.values(list.get(0).size()-1, row));
 		double valEst = 0.863121;
 		assertEquals(valEst,val,0.0001);
 	}
@@ -31,7 +31,7 @@ public class DecisionTreeIDEntropyTest {
 		boolean[] row = new boolean[list.size()];
 		row[0] = true;
 		int indiceColesterolIndexVar = 2;
-		double[] val = t.entropia(list.get(0).size()-1,indiceColesterolIndexVar, row, t.getTargetColumn());
+		double[] val = t.entropia(list.get(0).size()-1,indiceColesterolIndexVar, row, t.values(list.get(0).size()-1, row));
 		double[] valEst = {0.918296,0.721928};
 		assertArrayEquals(valEst,val,0.0001);
 	}
@@ -45,6 +45,7 @@ public class DecisionTreeIDEntropyTest {
 		boolean[] col = new boolean[list.get(0).size()];
 		row[0] = true;
 		int ind = t.ganancia(row,col,list.get(0).size()-1);
+		System.out.println(ind);
 		assertEquals(0,ind);
 	}
 
@@ -71,8 +72,9 @@ public class DecisionTreeIDEntropyTest {
 		boolean[] row = new boolean[list.size()];
 		Arrays.fill(row, true);
 		row[1] = false; row[3] = false; row[5] = false; row[6] = false;
-		double[] val = t.entropia(list.get(0).size()-1,1, row, t.getTargetColumn());
-		double[] valEst = {1,0};
+		double[] val = t.entropia(list.get(0).size()-1,1, row, t.values(list.get(0).size()-1, row));
+		double[] valEst = {0,1};
+		System.out.println(Arrays.toString(val));
 		assertArrayEquals(valEst,val,0.0001);
 	}
 	
@@ -84,8 +86,8 @@ public class DecisionTreeIDEntropyTest {
 		boolean[] row = new boolean[list.size()];
 		Arrays.fill(row, true);
 		row[1] = false; row[3] = false; row[5] = false; row[6] = false;
-		double val = t.entropiaRes(list.get(0).size()-1, row, t.getTargetColumn());
-		double valEst = 0.9710;
+		double val = t.entropiaRes(list.get(0).size()-1, row, t.values(list.get(0).size()-1, row));
+		double valEst = 0.81127;
 		assertEquals(valEst,val,0.001);
 	}
 	
@@ -97,7 +99,7 @@ public class DecisionTreeIDEntropyTest {
 		List<List<String>> list = t.getTable();
 		boolean[] row = new boolean[list.size()];
 		row[0] = true;
-		double val = t.entropiaRes(list.get(0).size()-1, row, t.getTargetColumn());
+		double val = t.entropiaRes(list.get(0).size()-1, row, t.values(list.get(0).size()-1, row));
 		double valEst = 0.9403;
 		assertEquals(valEst,val,0.001);
 	}
@@ -107,15 +109,15 @@ public class DecisionTreeIDEntropyTest {
 		DecisionTreeID t = new DecisionTreeID();
 		t.readCSV("csv-files/Tennis.csv");
 		List<List<String>> list = t.getTable();
-		List<String> target = t.getTargetColumn();
 		boolean[] row = new boolean[list.size()];
+		List<String> target = t.values(list.get(0).size()-1, row);
 		row[0] = true;
 		double[] entropys;
 		double[][] entropysEst = {
-				{0.9710,0,0.8844},
+				{0.9710,0,0.9710},
 				{1,0.9183,0.8113},
 				{0.9852,0.5917},
-				{1,0.8113}
+				{0.8113,1}
 								};
 		for (int j = 0; j<list.get(0).size()-1;j++) {
 			entropys = t.entropia(list.get(0).size()-1, j, row, target);
@@ -146,7 +148,7 @@ public class DecisionTreeIDEntropyTest {
 		Arrays.fill(row, true);
 		row[1] = false; row[2] = false; row[8] = false;
 		row[9] = false; row[11]= false;
-		double val = t.entropiaRes(list.get(0).size()-1, row, t.getTargetColumn());
+		double val = t.entropiaRes(list.get(0).size()-1, row, t.values(list.get(0).size()-1, row));
 		double valEst = 0.9710;
 		assertEquals(valEst,val,0.001);
 	}
@@ -157,8 +159,13 @@ public class DecisionTreeIDEntropyTest {
 		DecisionTreeID t = new DecisionTreeID();
 		t.readCSV("csv-files/Tennis.csv");
 		List<List<String>> list = t.getTable();
-		List<String> target = t.getTargetColumn();
 		boolean[] row = new boolean[list.size()];
+		
+		
+		
+		List<String> target = t.values(list.get(0).size()-1, row);
+		
+		
 		boolean[] col = new boolean[list.get(0).size()];
 		col[0] = true; col[list.get(0).size()-1] = true;
 		Arrays.fill(row, true);
@@ -166,16 +173,17 @@ public class DecisionTreeIDEntropyTest {
 		row[9] = false; row[11]= false;
 		double[] entropys;
 		double[][] entropysEst = {
+				{0,0,0},
 				{0,1,0},
-				{0.9710,0,0},
+				{0,0},
 				{0.9183,1},
 								};
 		for (int j = 0; j<list.get(0).size();j++) {
 			if (!col[j]) {
 			entropys = t.entropia(list.get(0).size()-1, j, row, target);
-			assertArrayEquals(entropysEst[cont],entropys,0.001);
-			cont++;
+			assertArrayEquals(entropysEst[j],entropys,0.001);
 			}
+		
 		}
 	}
 	
@@ -207,7 +215,7 @@ public class DecisionTreeIDEntropyTest {
 		Arrays.fill(row, true);
 		row[4] = false; row[5] = false; row[6] = false;
 		row[10] = false; row[14]= false;
-		double val = t.entropiaRes(list.get(0).size()-1, row, t.getTargetColumn());
+		double val = t.entropiaRes(list.get(0).size()-1, row, t.values(list.get(0).size()-1, row));
 		double valEst = 0.9710;
 		assertEquals(valEst,val,0.001);
 	}
@@ -218,16 +226,17 @@ public class DecisionTreeIDEntropyTest {
 		DecisionTreeID t = new DecisionTreeID();
 		t.readCSV("csv-files/Tennis.csv");
 		List<List<String>> list = t.getTable();
-		List<String> target = t.getTargetColumn();
 		boolean[] row = new boolean[list.size()];
 		boolean[] col = new boolean[list.get(0).size()];
+		List<String> target = t.values(list.get(0).size()-1, row);
 		col[0] = true; col[list.get(0).size()-1] = true;
 		Arrays.fill(row, true);
 		row[4] = false; row[5] = false; row[6] = false;
 		row[10] = false; row[14]= false;
 		double[] entropies;
 		double[][] entropysEst = {
-				{0,0.9183,1},
+				{0,0,0},
+				{0.9183,1},
 				{1,0.9183},
 				{0,0},
 								};
@@ -265,7 +274,7 @@ public class DecisionTreeIDEntropyTest {
 		List<List<String>> list = t.getTable();
 		boolean[] row = new boolean[list.size()];
 		row[0] = true;
-		double[] val = t.entropia(list.get(0).size()-1,0, row, t.getTargetColumn());
+		double[] val = t.entropia(list.get(0).size()-1,0, row, t.values(list.get(0).size()-1, row));
 		double[] valEst = {0,0};
 		assertArrayEquals(valEst,val,0.0001);
 	}
@@ -277,7 +286,7 @@ public class DecisionTreeIDEntropyTest {
 		List<List<String>> list = t.getTable();
 		boolean[] row = new boolean[list.size()];
 		Arrays.fill(row, true);
-		double[] val = t.entropia(list.get(0).size()-1,0, row, t.getTargetColumn());
+		double[] val = t.entropia(list.get(0).size()-1,0, row, t.values(list.get(0).size()-1, row));
 		double[] valEst = {};
 		assertArrayEquals(valEst,val,0.0001);
 	}
