@@ -87,9 +87,30 @@ public class DecisionTreeIDCSVReaderTest {
 	
 	
 	@Test
-	public void testReaderMissingValuesMapToUnknown() {
-		//not sure
-		fail("Not yet implemented");
+	public void testReaderShouldSkipMissingValues() {
+		DecisionTreeID dt = new DecisionTreeID();
+		String[][] caseMissing = 
+			{
+					{"Longitud Pelo","Peso", "Edad", "Genero"},
+					{"Menor 5","Mayor 160 lbs", "Menor 40", "H"},
+					{"Menor 5","Menor 160 lbs", "Menor 40", "H"},
+					{"Mayor 5","Menor 160 lbs", "Menor 40", "M"},
+					{"Menor 5","Mayor 160 lbs", "Mayor 40", "H"},
+					{"Mayor 5","Mayor 160 lbs", "Menor 40", "H"},
+					{"Mayor 5","Mayor 160 lbs", "Mayor 40", "H"}
+			};
+		
+		List<List<String>> list;
+		List<List<String>> target = Arrays.stream(caseMissing, 0, caseMissing.length)
+				.map(p -> Arrays.asList(p))
+				.collect(Collectors.toList());
+		try {
+			dt.readCSV(directory+"missingVals.csv");
+			list = dt.getTable();
+			assertEquals(list,target);
+		} catch (FileNotFoundException e) {
+			fail("missingVals.csv not found.");
+		}
 	}
 	
 	@Test

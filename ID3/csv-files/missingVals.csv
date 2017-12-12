@@ -1,0 +1,10 @@
+Longitud Pelo,Peso,Edad,Genero
+Menor 5,Mayor 160 lbs,Menor 40,H
+Mayor 5,,Menor 40,M
+Menor 5,Menor 160 lbs,Menor 40,H
+Mayor 5,Menor 160 lbs,Menor 40,M
+,Menor 160 lbs,Menor 40,M
+Menor 5,Mayor 160 lbs,Mayor 40,H
+Mayor 5,Menor 160 lbs,Mayor 40,
+Mayor 5,Mayor 160 lbs,Menor 40,H
+Mayor 5,Mayor 160 lbs,Mayor 40,H

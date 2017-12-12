@@ -255,7 +255,7 @@ public class DecisionTreeIDEntropyTest {
 	
 
 	@Test
-	public void testEntropyShouldWorkIfThereWereAnyRadicalZeroes() throws FileNotFoundException {
+	public void testEntropyShouldWorkIfThereWereAnyZeroesInNumerator() throws FileNotFoundException {
 		DecisionTreeID t = new DecisionTreeID();
 		t.readCSV("csv-files/entropyZeros.csv");
 		List<List<String>> list = t.getTable();
