@@ -243,8 +243,7 @@ public class DecisionTreeIDEntropyTest {
 		for (int j = 0; j<list.get(0).size();j++) {
 			if (!col[j]) {
 			entropies = t.entropia(list.get(0).size()-1, j, row, target);
-			assertArrayEquals(entropysEst[cont],entropies,0.001);
-			cont++;
+			assertArrayEquals(entropysEst[j],entropies,0.001);
 			}
 		}
 	}
