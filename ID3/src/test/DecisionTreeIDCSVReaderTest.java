@@ -39,13 +39,13 @@ public class DecisionTreeIDCSVReaderTest {
 	}
 	
 	@Test(expected = Exception.class)
-	public void testReaderShouldRaiseAnExceptionWhenUniqueColumnCSV() 
+	public void testReaderShouldRaiseAnExceptionWhenUniqueRowCSV() 
 			throws FileNotFoundException {
 		DecisionTreeID dt = new DecisionTreeID();
 		try {
-			dt.readCSV(directory+"OneCol.csv");
+			dt.readCSV(directory+"OneRow.csv");
 		} catch (FileNotFoundException e) {
-			fail("OneCol.csv not found.");
+			fail("OneRow.csv not found.");
 		}
 	}
 	
