@@ -153,6 +153,7 @@ public class DecisionTreeIDEntropyTest {
 	
 	@Test
 	public void testEntropyTennisSecondIterationForAllVariables() throws FileNotFoundException {
+		int cont = 0;
 		DecisionTreeID t = new DecisionTreeID();
 		t.readCSV("csv-files/Tennis.csv");
 		List<List<String>> list = t.getTable();
@@ -172,7 +173,8 @@ public class DecisionTreeIDEntropyTest {
 		for (int j = 0; j<list.get(0).size();j++) {
 			if (!col[j]) {
 			entropys = t.entropia(list.get(0).size()-1, j, row, target);
-			assertArrayEquals(entropysEst[j],entropys,0.001);
+			assertArrayEquals(entropysEst[cont],entropys,0.001);
+			cont++;
 			}
 		}
 	}
@@ -212,6 +214,7 @@ public class DecisionTreeIDEntropyTest {
 	
 	@Test
 	public void testEntropyTennisThirdIterationForAllVariables() throws FileNotFoundException {
+		int cont = 0;
 		DecisionTreeID t = new DecisionTreeID();
 		t.readCSV("csv-files/Tennis.csv");
 		List<List<String>> list = t.getTable();
@@ -231,7 +234,8 @@ public class DecisionTreeIDEntropyTest {
 		for (int j = 0; j<list.get(0).size();j++) {
 			if (!col[j]) {
 			entropies = t.entropia(list.get(0).size()-1, j, row, target);
-			assertArrayEquals(entropysEst[j],entropies,0.001);
+			assertArrayEquals(entropysEst[cont],entropies,0.001);
+			cont++;
 			}
 		}
 	}
