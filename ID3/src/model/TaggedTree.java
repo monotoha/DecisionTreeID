@@ -95,7 +95,7 @@ public class TaggedTree <T> {
 	 * 
 	 * @return Max of number of levels under current node + 1. 
 	 */
-	public int getNodeWidth() {
+	public int getNodeHeight() {
 		if (isEmpty()) {
 			throw new RuntimeException("Empty node does not have depth.");
 		}
