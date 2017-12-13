@@ -45,7 +45,6 @@ public class DecisionTreeIDEntropyTest {
 		boolean[] col = new boolean[list.get(0).size()];
 		row[0] = true;
 		int ind = t.ganancia(row,col,list.get(0).size()-1);
-		System.out.println(ind);
 		assertEquals(0,ind);
 	}
 
@@ -65,6 +64,20 @@ public class DecisionTreeIDEntropyTest {
 	}
 	
 	@Test
+	public void testIndexMaxGainFirstIterationShouldBeHairLengthIndexSimpsonsCSV() throws FileNotFoundException {
+		DecisionTreeID t = new DecisionTreeID();
+		t.readCSV("csv-files/simpsons.csv");
+		List<List<String>> list = t.getTable();
+		boolean[] row = new boolean[list.size()];
+		boolean[] col = new boolean[list.get(0).size()];
+		row[0] = true;
+		col[0] = true;
+		int val = t.ganancia(row,col,list.get(0).size()-1);
+		int valEst = 1;
+		assertEquals(valEst,val);
+	}
+	
+	@Test
 	public void testEntropySecondIterationWeightSimpsons() throws FileNotFoundException {
 		DecisionTreeID t = new DecisionTreeID();
 		t.readCSV("csv-files/simpsons.csv");
@@ -74,8 +87,26 @@ public class DecisionTreeIDEntropyTest {
 		row[1] = false; row[3] = false; row[5] = false; row[6] = false;
 		double[] val = t.entropia(list.get(0).size()-1,1, row, t.values(list.get(0).size()-1, row));
 		double[] valEst = {0,1};
-		System.out.println(Arrays.toString(val));
 		assertArrayEquals(valEst,val,0.0001);
+	}
+	
+	@Test
+	public void testEntropyFirstIterationAllVarsSimpsons() throws FileNotFoundException {
+		DecisionTreeID t = new DecisionTreeID();
+		t.readCSV("csv-files/simpsons.csv");
+		List<List<String>> list = t.getTable();
+		boolean[] row = new boolean[list.size()];
+		row[0] = true;
+		double[] val;
+		double[][] valEst = {
+				{0.8113,0.97095},
+				{0,0.7219},
+				{1,0.9183}
+				};
+		for (int i = 0; i<list.get(0).size()-1;i++) {
+			val = t.entropia(list.get(0).size()-1,i, row, t.values(list.get(0).size()-1, row));
+			assertArrayEquals(valEst[i],val,0.0001);
+		}
 	}
 	
 	@Test
@@ -91,6 +122,17 @@ public class DecisionTreeIDEntropyTest {
 		assertEquals(valEst,val,0.001);
 	}
 	
+	@Test
+	public void testEntropyResFirstIterationSimpsons() throws FileNotFoundException {
+		DecisionTreeID t = new DecisionTreeID();
+		t.readCSV("csv-files/simpsons.csv");
+		List<List<String>> list = t.getTable();
+		boolean[] row = new boolean[list.size()];
+		row[0] = true;
+		double val = t.entropiaRes(list.get(0).size()-1, row, t.values(list.get(0).size()-1, row));
+		double valEst = 0.9911;
+		assertEquals(valEst,val,0.001);
+	}
 	
 	@Test
 	public void testEntropyResTennisFirstIteration() throws FileNotFoundException {

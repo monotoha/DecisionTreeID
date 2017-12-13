@@ -71,7 +71,7 @@ public class DecisionTreeID {
 	}
 
 
-	private Set<String> getValuesGivenColumn(Integer j) {
+	public Set<String> getValuesGivenColumn(Integer j) {
 		return IntStream.range(1, this.table.size())
 				.boxed()
 				.map(i -> this.table.get(i).get(j))
@@ -96,7 +96,7 @@ public class DecisionTreeID {
 			sons = new HashMap<>();
 			newAttributes = Arrays.copyOf(attributes,attributes.length);
 			newAttributes[indexNodeMaxGain] = true;
-			values.forEach(i -> sons.put(i, buildID3Tree(newCases(i,indexNodeMaxGain,cases),newAttributes)));
+			values.stream().forEach(i -> sons.put(i, buildID3Tree(newCases(i,indexNodeMaxGain,cases),newAttributes)));
 			t = new TaggedTree<>(rootNodeValue,sons);
 		}
 		return t;
@@ -106,61 +106,14 @@ public class DecisionTreeID {
 		boolean[] res = Arrays.copyOf(cases, cases.length);
 		IntStream.range(1, this.table.size())
 		.forEach(i -> res[i] = res[i] || !this.table.get(i).get(j).equals(value));
-		// FALLA
 		return res;
 	}
 
 
 	private int getIndexMaxGain(boolean[] cases, boolean[] attributes) {
-		/*double entropy = entropy(cases);
-		return IntStream.range(0, table.get(0).size() - 1)
-		.boxed()
-		.filter(j -> !attributes[j])
-		.map(j -> gainGivenColumnAndCases(j,cases,entropy))
-		.max(comparatorGain)
-		.get() // if not present throws NoSuchElementException
-		[1].intValue();*/
 		return ganancia(cases,attributes,this.table.get(0).size()-1);
 	}
 	
-	/**
-	 * This method gets the variable's Gain.
-	 * @param j : Index of the variable.
-	 * @param cases : A boolean array telling if a case shouldn't be considered.
-	 * @param entropy : Entropy value of the target.
-	 * @return A Double[] size 2 formed by
-	 *  the variable index j (position 1) and its gain (position 0).
-	 */
-	private Double[] gainGivenColumnAndCases(Integer j, boolean[] cases, double entropy) {
-		// TODO Auto-generated method stub
-		Double[] res = new Double[2];
-		res[0] = 0.5;
-		res[1] = j.doubleValue();
-		return res;
-	}
-
-	/**
-	 * Gets entropy of the target.
-	 * @param cases : A boolean array telling if a case shouldn't be considered.
-	 * @return : Entropy value
-	 */
-	private double entropy(boolean[] cases) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	/**
-	 * Given a variable and the value gets its entropy.
-	 * Note that this is a posterior.
-	 * @param j : Variable's index.
-	 * @param cases : What cases shouldn't be considered.
-	 * @param valueGiven : what value the variable takes.
-	 * @return such entropy
-	 */
-	private double entropyConditioned(Integer j, boolean[] cases, String valueGiven) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
 	/**
 	 * 
 	 * @return List formed by last column of the table.
@@ -243,31 +196,38 @@ public class DecisionTreeID {
 	public Object prediction(String[] registroCVS) {
 		return null;
 	}
+	/**
+	 * 
+	 * @param row : what cases should be considered
+	 * @param col : what variables should be considered
+	 * @param res : Target index
+	 * @return
+	 */
     public int ganancia(boolean[] row,boolean[] col,int res)
     {
-        double[] ganancias = new double[col.length];
+        double[] ganancias = new double[col.length]; // for each variable there is one gain
         double[] classAmount;
-        List<String> valuesRes = values(res,row);
-        double entropiaRes = entropiaRes(res,row,valuesRes);
-        List<String> values;
+        List<String> valuesRes = values(res,row); // set containing the target values
+        double entropiaRes = entropiaRes(res,row,valuesRes); // entropy target
+        List<String> values; // helper variable containing the values of a given index variable
         for(int i=0;i<col.length;i++)
         {
-            values = values(i,row);
-            double total=0;
-            ganancias[i] = entropiaRes;
-            if(i!=res)
+            values = values(i,row); // this might be troublesome
+            double total=0; // number of cases to be considered
+            ganancias[i] = entropiaRes; // first value is target entropy
+            
+            if(i!=res) // if i is target, gain won't be calculated
             {
-                
-                
-                classAmount = new double[values.size()+1];
+                classAmount = new double[values.size()]; // for each variable value one class amount.
                 
                 for(int j=0;j<row.length;j++)
-                    if(!row[j])
+                    if(!row[j]) // checks if the case i should be considered
                     {
-                        classAmount[values.indexOf(table.get(j).get(i))]++;
+                        classAmount[values.indexOf(table.get(j).get(i))]++; 
+                        // it finds current value in values set and then takes awareness
                         total++;
                     }       
-                double[] entropia = entropia(res,i,row,valuesRes);
+                double[] entropia = entropia(res,i,row,valuesRes); // for each variable's value -> one entropy
                 for(int j =0;j<entropia.length;j++)
                 {
                     ganancias[i]-=(classAmount[j]/total)*entropia[j];
@@ -275,11 +235,11 @@ public class DecisionTreeID {
                 
             }
         }
-        int index =0;
-        double max=0;
+        int index =-1;
+        double max=-1;
         for(int i=0;i<ganancias.length;i++)
         {
-            if(ganancias[i]>max && i != res)
+            if(ganancias[i]>max && i != res && !col[i])
             {
                 max=ganancias[i];
                 index = i;
