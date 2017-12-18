@@ -1,5 +1,6 @@
 package demo;
 
+import java.awt.Dimension;
 import java.awt.event.ActionListener;
 
 import javax.swing.JFrame;
@@ -21,7 +22,8 @@ public class DecisionTreeDemo {
 		JFrame frame = new JFrame("Decision Tree ID3");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setContentPane((JPanel) window);
-		frame.pack();
+		frame.setSize(new Dimension(1024, 600));	
+		//frame.pack();
 		frame.setVisible(true);
 	}
 }
