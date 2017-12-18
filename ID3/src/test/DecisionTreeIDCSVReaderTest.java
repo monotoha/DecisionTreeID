@@ -12,19 +12,18 @@ import model.DecisionTreeID;
 
 public class DecisionTreeIDCSVReaderTest {
 	private final static String directory = "csv-files/";
+	
 	@Test(expected = Exception.class)
 	public void testReaderShouldRaiseAnExceptionWhenFormatIsNotCVS() 
 			throws FileNotFoundException {
 		DecisionTreeID dt = new DecisionTreeID();
 		dt.readCSV("title");
-		
 	}
 	@Test(expected = Exception.class)
 	public void testReaderShouldRaiseAnExceptionWhenCSVIsNotFound() 
 			throws FileNotFoundException {
 		DecisionTreeID dt = new DecisionTreeID();
 		dt.readCSV("WhereIsIt?.csv");
-		
 	}
 	
 	@Test(expected = Exception.class)
@@ -61,12 +60,34 @@ public class DecisionTreeIDCSVReaderTest {
 		try {
 			dt.readCSV(directory+"emptyRows.csv");
 			list = dt.getTable();
+			list = list.stream()
+			.map(i -> i.stream().map(String::toLowerCase).collect(Collectors.toList()))
+			.collect(Collectors.toList());
 			assertEquals(list,target);
 		} catch (FileNotFoundException e) {
 			fail("emptyRows.csv not found.");
 		}
 	}
-	
+	@Test(expected=Exception.class)
+	public void testReaderShouldRaiseExceptionIfEmptyValuesInHeader() {
+		DecisionTreeID dt = new DecisionTreeID();
+		String[][] caseUncompleteLine = {{"Temperatura","Suelo","Target"},{"Alta","peridotita","Si"},{"Baja","caliza","No"}};
+		
+		List<List<String>> list;
+		List<List<String>> target = Arrays.stream(caseUncompleteLine, 0, caseUncompleteLine.length)
+				.map(p -> Arrays.asList(p))
+				.collect(Collectors.toList());
+		try {
+			dt.readCSV(directory+"uncompleteHeader.csv");
+			list = dt.getTable();
+			list = list.stream()
+			.map(i -> i.stream().map(String::toLowerCase).collect(Collectors.toList()))
+			.collect(Collectors.toList());
+			assertEquals(list,target);
+		} catch (FileNotFoundException e) {
+			fail("uncompleteHeader.csv not found.");
+		}
+	}
 	@Test
 	public void testReaderShouldSkipUncompleteLines() {
 		DecisionTreeID dt = new DecisionTreeID();
@@ -79,6 +100,9 @@ public class DecisionTreeIDCSVReaderTest {
 		try {
 			dt.readCSV(directory+"uncompleteLine.csv");
 			list = dt.getTable();
+			list = list.stream()
+			.map(i -> i.stream().map(String::toLowerCase).collect(Collectors.toList()))
+			.collect(Collectors.toList());
 			assertEquals(list,target);
 		} catch (FileNotFoundException e) {
 			fail("uncompleteLine.csv not found.");
@@ -107,6 +131,9 @@ public class DecisionTreeIDCSVReaderTest {
 		try {
 			dt.readCSV(directory+"missingVals.csv");
 			list = dt.getTable();
+			list = list.stream()
+			.map(i -> i.stream().map(String::toLowerCase).collect(Collectors.toList()))
+			.collect(Collectors.toList());
 			assertEquals(list,target);
 		} catch (FileNotFoundException e) {
 			fail("missingVals.csv not found.");
@@ -137,6 +164,9 @@ public class DecisionTreeIDCSVReaderTest {
 		try {
 			dt.readCSV(directory+"simpsons.csv");
 			list = dt.getTable();
+			list = list.stream()
+			.map(i -> i.stream().map(String::toLowerCase).collect(Collectors.toList()))
+			.collect(Collectors.toList());
 			assertEquals(list,target);
 		} catch (FileNotFoundException e) {
 			fail("simpsons.csv not found.");
@@ -172,6 +202,9 @@ public class DecisionTreeIDCSVReaderTest {
 		try {
 			dt.readCSV(directory+"Tennis.csv");
 			list = dt.getTable();
+			list = list.stream()
+			.map(i -> i.stream().map(String::toLowerCase).collect(Collectors.toList()))
+			.collect(Collectors.toList());
 			assertEquals(list,target);
 		} catch (FileNotFoundException e) {
 			fail("Tennis.csv not found.");
