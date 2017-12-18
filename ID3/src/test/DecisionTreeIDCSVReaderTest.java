@@ -11,7 +11,7 @@ import org.junit.Test;
 import model.DecisionTreeID;
 
 public class DecisionTreeIDCSVReaderTest {
-	private final static String directory = "csv-files/";
+	private final static String directory = "/home/monotoha/ID3Alex/ID3/csv-files/";
 	
 	@Test(expected = Exception.class)
 	public void testReaderShouldRaiseAnExceptionWhenFormatIsNotCVS() 

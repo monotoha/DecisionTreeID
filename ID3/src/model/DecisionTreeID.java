@@ -16,6 +16,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import javax.management.RuntimeErrorException;
+
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
@@ -44,16 +46,32 @@ public class DecisionTreeID {
 		try {
 			parser = new CSVParser(reader, CSVFormat.DEFAULT);
 			List<CSVRecord> records = parser.getRecords();
-
+			boolean header = true;
+			int headSize = 0;
 			for (CSVRecord r : records) {
+				if(header)
+					headSize = r.size();
 				List<String> row = new ArrayList<>();
-				r.forEach(x -> {
-					row.add(x.isEmpty() ? "UNKNOWN" : x);
-				});
-				table.add(row);
+				for (String x : r)
+				{
+					boolean empty = x.trim().isEmpty();
+					
+					if(empty && header)
+						throw new RuntimeException(x);
+					if(!empty)
+						row.add(x.trim().toLowerCase());
+				}
+				if (headSize==row.size())
+					table.add(row);
+				header = false;
+				
 			}
 		} catch (IOException e) {
 			System.out.println("IOException");
+		}
+		if (table.size()<=1)
+		{
+			throw new RuntimeException("Solo hay header");
 		}
 	}
 	
