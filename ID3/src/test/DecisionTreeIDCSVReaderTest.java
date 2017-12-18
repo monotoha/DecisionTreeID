@@ -60,7 +60,7 @@ public class DecisionTreeIDCSVReaderTest {
 		try {
 			dt.readCSV(directory+"emptyRows.csv");
 			list = dt.getTable();
-			list = list.stream()
+			target = target.stream()
 			.map(i -> i.stream().map(String::toLowerCase).collect(Collectors.toList()))
 			.collect(Collectors.toList());
 			assertEquals(list,target);
@@ -80,7 +80,7 @@ public class DecisionTreeIDCSVReaderTest {
 		try {
 			dt.readCSV(directory+"uncompleteHeader.csv");
 			list = dt.getTable();
-			list = list.stream()
+			target = target.stream()
 			.map(i -> i.stream().map(String::toLowerCase).collect(Collectors.toList()))
 			.collect(Collectors.toList());
 			assertEquals(list,target);
@@ -100,7 +100,7 @@ public class DecisionTreeIDCSVReaderTest {
 		try {
 			dt.readCSV(directory+"uncompleteLine.csv");
 			list = dt.getTable();
-			list = list.stream()
+			target = target.stream()
 			.map(i -> i.stream().map(String::toLowerCase).collect(Collectors.toList()))
 			.collect(Collectors.toList());
 			assertEquals(list,target);
@@ -131,7 +131,7 @@ public class DecisionTreeIDCSVReaderTest {
 		try {
 			dt.readCSV(directory+"missingVals.csv");
 			list = dt.getTable();
-			list = list.stream()
+			target = target.stream()
 			.map(i -> i.stream().map(String::toLowerCase).collect(Collectors.toList()))
 			.collect(Collectors.toList());
 			assertEquals(list,target);
@@ -164,7 +164,7 @@ public class DecisionTreeIDCSVReaderTest {
 		try {
 			dt.readCSV(directory+"simpsons.csv");
 			list = dt.getTable();
-			list = list.stream()
+			target = target.stream()
 			.map(i -> i.stream().map(String::toLowerCase).collect(Collectors.toList()))
 			.collect(Collectors.toList());
 			assertEquals(list,target);
@@ -202,7 +202,7 @@ public class DecisionTreeIDCSVReaderTest {
 		try {
 			dt.readCSV(directory+"Tennis.csv");
 			list = dt.getTable();
-			list = list.stream()
+			target = target.stream()
 			.map(i -> i.stream().map(String::toLowerCase).collect(Collectors.toList()))
 			.collect(Collectors.toList());
 			assertEquals(list,target);
