@@ -34,11 +34,13 @@ public class ID3Window extends JPanel implements ID3View {
 	private JButton openFileButton;
 	private JLabel message;
 	private JFileChooser fc;
-	
+
 	private JPanel selectionMap;
 	private JLabel predictionResult;
 	private JButton predictButton;
-	private Map<String,JComboBox> predictionMenu;
+	private Map<String, JComboBox> predictionMenu;
+
+	private JPanel treePanel;
 
 	public ID3Window() {
 		fileDirectory = new JTextField(50);
@@ -49,7 +51,7 @@ public class ID3Window extends JPanel implements ID3View {
 		fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
 
 		openFileButton.setSize(10, 10);
-		
+
 		predictionResult = new JLabel("");
 		predictButton = new JButton("Predict");
 
@@ -57,12 +59,15 @@ public class ID3Window extends JPanel implements ID3View {
 		loadPanel.setLayout(new GridLayout(1, 3));
 		loadPanel.add(fileDirectory);
 		loadPanel.add(openFileButton);
-		
+
 		selectionMap = new JPanel();
+		treePanel = new JPanel();
 
 		setLayout(new BorderLayout());
 		add(loadPanel, BorderLayout.NORTH);
-		add(message, BorderLayout.SOUTH);
+		add(treePanel, BorderLayout.CENTER);
+		add(selectionMap, BorderLayout.SOUTH);
+		// add(message, BorderLayout.SOUTH);
 
 	}
 
@@ -81,33 +86,36 @@ public class ID3Window extends JPanel implements ID3View {
 	public String getCsvFileLocation() {
 		return fileDirectory.getText();
 	}
-	
+
 	public void showSelectionMap(Map<String, Set<String>> attributes) {
 		int numOfDropLists = attributes.keySet().size();
 		predictionMenu = new HashMap<>();
+		
+		selectionMap.removeAll();
 		selectionMap.setLayout(new GridLayout(2, numOfDropLists + 2));
 		int boxCounter = 0;
 		for (String title : attributes.keySet()) {
 			String[] values = new String[attributes.get(title).size()];
 			int index = 0;
-			
+
 			for (String value : attributes.get(title)) {
 				values[index++] = value;
 			}
-			
+
 			JComboBox box = new JComboBox(values);
 			predictionMenu.put(title, box);
 			selectionMap.add(new JLabel(title));
 			selectionMap.add(box);
 		}
 		
+		
 		selectionMap.add(predictionResult);
 		selectionMap.add(predictButton);
-		add(selectionMap, BorderLayout.SOUTH);
-		
+		selectionMap.revalidate();
+		selectionMap.repaint();
+
 	}
 
-	
 	public Map<String, String> getPredictionInput() {
 		// TODO Auto-generated method stub
 		Map<String, String> input = new HashMap<>();
@@ -121,7 +129,7 @@ public class ID3Window extends JPanel implements ID3View {
 		// TODO Auto-generated method stub
 		predictionResult.setHorizontalTextPosition(SwingConstants.CENTER);
 		predictionResult.setText(result);
-		
+
 	}
 
 	public void addController(ActionListener ctr) {
@@ -157,6 +165,9 @@ public class ID3Window extends JPanel implements ID3View {
 			tGraph.getModel().endUpdate();
 		}
 
-		add(new mxGraphComponent(tGraph), BorderLayout.CENTER);
+		treePanel.removeAll();
+		treePanel.add(new mxGraphComponent(tGraph), BorderLayout.CENTER);
+		treePanel.revalidate();
+		treePanel.repaint();
 	}
 }
