@@ -35,57 +35,60 @@ public class DecisionTreeIDModelTest {
 		DecisionTreeID t = new DecisionTreeID();
 		TaggedTree<String> idealTree = buildTreeSimpsons();
 		t.learnID3("csv-files/simpsons.csv");
+		System.out.println(idealTree);
+		System.out.println(t.getModel());
+		System.out.println(idealTree.equals(t.getModel()));
 		assertEquals(idealTree,t.getModel());
 	}
 	
 	private TaggedTree<String> buildTreeSimpsons() {
 		TaggedTree<String> aux1,aux2,aux3;
 		Map<String, TaggedTree<String>> sons = null;
-		String nodeH="H",nodeM="M";
+		String nodeH="h",nodeM="m";
 		aux1 = new TaggedTree<>(nodeH);
 		aux2 = new TaggedTree<>(nodeM);
 		sons = new HashMap<>();
-		sons.put("Menor 5", aux1);
-		sons.put("Mayor 5", aux2);
-		aux2 = new TaggedTree<>("Longitud Pelo",sons);
+		sons.put("menor 5", aux1);
+		sons.put("mayor 5", aux2);
+		aux2 = new TaggedTree<>("longitud pelo",sons);
 		aux1 = new TaggedTree<>(nodeH);
 		sons = new HashMap<>();
-		sons.put("Mayor 160 lbs", aux1);
-		sons.put("Menor 160 lbs", aux2);
-		return new TaggedTree<>("Peso",sons);
+		sons.put("mayor 160 lbs", aux1);
+		sons.put("menor 160 lbs", aux2);
+		return new TaggedTree<>("peso",sons);
 	}
 
 	private TaggedTree<String> buildTreeTennis() {
 		TaggedTree<String> aux1,aux2,aux3;
-		String leafNo = "No", leafYes = "Yes";
+		String leafNo = "no", leafYes = "yes";
 		Map<String, TaggedTree<String>> sons = null;
 		aux1 = new TaggedTree<>(leafNo);
 		aux2 = new TaggedTree<>(leafYes);
 		sons = new HashMap<>();
-		sons.put("High", aux1);
-		sons.put("Normal", aux2);
-		aux1 = new TaggedTree<>("Humidity",sons);
+		sons.put("high", aux1);
+		sons.put("normal", aux2);
+		aux1 = new TaggedTree<>("humidity",sons);
 		aux2 = new TaggedTree<>(leafYes);
 		aux3 = new TaggedTree<>(leafNo);
 		sons = new HashMap<>();
-		sons.put("Weak", aux2);
-		sons.put("Strong", aux3);
-		aux3 = new TaggedTree<>("Wind",sons);
+		sons.put("weak", aux2);
+		sons.put("strong", aux3);
+		aux3 = new TaggedTree<>("wind",sons);
 		aux2 = new TaggedTree<>(leafYes);
 		sons = new HashMap<>();
-		sons.put("Sunny", aux1);
-		sons.put("Overcast", aux2);
-		sons.put("Rain", aux3);
-		return new TaggedTree<>("Outlook",sons);
+		sons.put("sunny", aux1);
+		sons.put("overcast", aux2);
+		sons.put("rain", aux3);
+		return new TaggedTree<>("outlook",sons);
 	}
 
 	private TaggedTree<String> buildTreeFarmaco() {
 		TaggedTree<String> aux1,aux2,aux3;
-		String node1 = "No",node2 = "Sí";
+		String node1 = "no",node2 = "si";
 		Map<String,TaggedTree<String>> sons = null;
 		aux1 = new TaggedTree<>(node1);
 		aux2 = new TaggedTree<>(node2);
-		String alerg = "Otras alergias",alto="alto",bajo="bajo";
+		String alerg = "otras alergias",alto="alto",bajo="bajo";
 		sons = new HashMap<>();
 		sons.put(node2, aux1);
 		sons.put(node1, aux2);
@@ -94,23 +97,23 @@ public class DecisionTreeIDModelTest {
 		sons = new HashMap<>();
 		sons.put(node2, aux1);
 		sons.put(node1, aux2);
-		aux1 = new TaggedTree<>("Alergia a antibióticos",sons);
+		aux1 = new TaggedTree<>("alergia a antibioticos",sons);
 		aux2 = new TaggedTree<>(node2);
 		sons = new HashMap<>();
 		sons.put(alto, aux1);
 		sons.put(bajo, aux2);
-		aux1 = new TaggedTree<>("Azúcar en sangre",sons);
+		aux1 = new TaggedTree<>("azucar en sangre",sons);
 		aux2 = new TaggedTree<>(node1);
 		aux3 = new TaggedTree<>(node2);
 		sons = new HashMap<>();
 		sons.put(alto, aux2);
 		sons.put(bajo, aux3);
-		aux2 = new TaggedTree<>("Índice de colesterol",sons);
+		aux2 = new TaggedTree<>("indice de colesterol",sons);
 		aux3 = new TaggedTree<>(node2);
 		sons = new HashMap<>();
-		sons.put("Alta", aux1);
-		sons.put("Media", aux2);
-		sons.put("Baja", aux3);
-		return new TaggedTree<>("Presión alterial",sons);
+		sons.put("alta", aux1);
+		sons.put("media", aux2);
+		sons.put("baja", aux3);
+		return new TaggedTree<>("presion alterial",sons);
 	}
 }
