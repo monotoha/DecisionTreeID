@@ -138,7 +138,7 @@ public class DecisionTreeID {
 	 * returned. There are 2 alternatives scenarios for a node to be leaf: 1. If the
 	 * table has no more variables for the model to learn. The most frequent value
 	 * in the target will be returned. 2. If by cases discrimination there is only
-	 * ONE target value. That one value will be returned.
+	 * ONE target value, that one value will be returned.
 	 * 
 	 * @param cases
 	 *            : What cases should not be considered
@@ -178,6 +178,13 @@ public class DecisionTreeID {
 
 	public TaggedTree<String> getModel() {
 		return this.model;
+	}
+	
+	public Object prediction(String[] input) {
+		Map<String,String> m = new HashMap<>();
+		IntStream.range(0, this.table.get(0).size()-1)
+		.forEach(j -> m.put(this.table.get(0).get(j), input[j]));
+		return prediction(m);
 	}
 	
 	/**

@@ -111,7 +111,7 @@ public class TaggedTree<T> {
 	 */
 	public int getNodeHeight() {
 		if (isEmpty()) {
-			throw new RuntimeException("Empty node does not have depth.");
+			throw new RuntimeException("Empty tree does not have depth.");
 		}
 		return this.node.height;
 	}
@@ -122,7 +122,7 @@ public class TaggedTree<T> {
 	 */
 	public int getNodeDepth() {
 		if (isEmpty()) {
-			throw new RuntimeException("Empty node does not have depth.");
+			throw new RuntimeException("Empty tree does not have depth.");
 		}
 		return this.node.depth;
 	}
@@ -131,7 +131,8 @@ public class TaggedTree<T> {
 		boolean res = o instanceof TaggedTree<?>;
 		if (res) {
 			TaggedTree<T> t = (TaggedTree<T>) o;
-			res = t.isEmpty() && this.isEmpty() || (this.node.equals(t.node) && this.getNodeDepth() == t.getNodeDepth()) && this.hashCode() == t.hashCode();
+			res = t.isEmpty() && this.isEmpty() 
+					|| (this.node.equals(t.node) && this.getNodeDepth() == t.getNodeDepth());
 		}
 		return res;
 	}
@@ -140,7 +141,6 @@ public class TaggedTree<T> {
 		B root;
 		Map<String, TaggedTree<B>> mapEdgeSubTree;
 		int height, depth;
-
 		public boolean isLeaf() {
 			return mapEdgeSubTree == null;
 		}
@@ -189,6 +189,8 @@ public class TaggedTree<T> {
 		}
 		return allNodes;
 	}
-
-
+	public boolean isSonOf(TaggedTree<T> t) {
+		return !t.isEmpty() && !t.isLeafNode() 
+				&& t.getEdgesAssociatedToSubTrees().containsValue(this);
+	}
 }

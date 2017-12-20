@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.IntStream;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -134,11 +135,13 @@ public class ID3Window extends JPanel implements ID3View {
 	public void drawTree(TaggedTree<String> tree) {
 		List<TaggedTree<String>> nodes = tree.getNodeList();
 		List<Object> vertices = new ArrayList<>();
-
+		List<TaggedTree<String>> vl = new ArrayList<>();
+		
 		mxGraph tGraph = new mxGraph();
 		int i = 0;
 		tGraph.getModel().beginUpdate();
 		try {
+		
 			for (TaggedTree<String> vertex : nodes) {
 				vertices.add(tGraph.insertVertex(tGraph.getDefaultParent(), null, vertex.getNodeValue(), 100 * (i++),
 						100 * vertex.getNodeDepth(), 80, 30));
@@ -148,8 +151,9 @@ public class ID3Window extends JPanel implements ID3View {
 				if (!vertex.isLeafNode()) {
 					Map<String, TaggedTree<String>> children = vertex.getEdgesAssociatedToSubTrees();
 					for (String edge : children.keySet()) {
-						tGraph.insertEdge(tGraph.getDefaultParent(), null, edge, vertices.get(nodes.indexOf(vertex)),
-								vertices.get(nodes.indexOf(children.get(edge))));
+						tGraph.insertEdge(tGraph.getDefaultParent(), null, edge, 
+								vertices.get(indexOf(nodes,vertex)),
+								vertices.get(indexOf(nodes, children.get(edge))));
 					}
 				}
 			}
@@ -158,5 +162,9 @@ public class ID3Window extends JPanel implements ID3View {
 		}
 
 		add(new mxGraphComponent(tGraph), BorderLayout.CENTER);
+	}
+	
+	private static <T> int indexOf(List<T> l, T o) {
+		return IntStream.range(0, l.size()).filter(i -> l.get(i) == o).findFirst().getAsInt();
 	}
 }
