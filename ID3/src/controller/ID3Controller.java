@@ -48,20 +48,22 @@ public class ID3Controller implements ActionListener {
 		// Handle open button action
 		if (e.getActionCommand().equals(ID3View.LOAD)) {
 			int returnVal = window.getFileChooser().showOpenDialog(null);
-			window.getMessage().setForeground(Color.RED);
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 				File data = window.getFileChooser().getSelectedFile();
 				window.getDirectoryField().setText(data.getPath());
 				window.getMessage().setText("CSV file was succesfully loaded.");
+				window.getMessage().setForeground(Color.BLACK);
 				try {
 					decisionTree = new DecisionTreeID();
 					decisionTree.learnID3(data.getPath());
 					window.drawTree(decisionTree.getModel());
 					window.showSelectionMap(buildSelectionMenu());
-					
+					window.getPredictButton().setEnabled(true);
 				} catch (FileNotFoundException | RuntimeException e1) {
 					// TODO Auto-generated catch block
 					window.getMessage().setText("Error loading the CSV file.");
+					window.getMessage().setForeground(Color.RED);
+					window.getPredictButton().setEnabled(false);
 					// System.out.println("Error con el archivo.");
 				}
 			}

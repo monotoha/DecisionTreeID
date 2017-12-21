@@ -46,6 +46,7 @@ public class ID3Window extends JPanel implements ID3View {
 
 	public ID3Window() {
 		fileDirectory = new JTextField(50);
+		fileDirectory.setEditable(false);
 		openFileButton = new JButton("Open");
 		message = new JLabel("");
 		fc = new JFileChooser();
@@ -77,7 +78,9 @@ public class ID3Window extends JPanel implements ID3View {
 		add(southPanel, BorderLayout.SOUTH);
 
 	}
-
+	public JButton getPredictButton() {
+		return this.predictButton;
+	}
 	public JFileChooser getFileChooser() {
 		return fc;
 	}

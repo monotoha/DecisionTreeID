@@ -4,6 +4,7 @@ import java.awt.event.ActionListener;
 import java.util.Map;
 import java.util.Set;
 
+import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
@@ -20,6 +21,7 @@ public interface ID3View {
 	public JFileChooser getFileChooser();
 	public JTextField getDirectoryField();
 	public JLabel getMessage();
+	public JButton getPredictButton();
 	public final String LOAD = "L";
 	public final String PREDICT = "P";
 	public void repaint();
