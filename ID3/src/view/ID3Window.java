@@ -42,6 +42,7 @@ public class ID3Window extends JPanel implements ID3View {
 	private Map<String, JComboBox> predictionMenu;
 
 	private JPanel treePanel;
+	private JPanel southPanel;
 
 	public ID3Window() {
 		fileDirectory = new JTextField(50);
@@ -52,7 +53,7 @@ public class ID3Window extends JPanel implements ID3View {
 		fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
 
 		openFileButton.setSize(10, 10);
-
+		
 		predictionResult = new JLabel("");
 		predictButton = new JButton("Predict");
 
@@ -63,12 +64,17 @@ public class ID3Window extends JPanel implements ID3View {
 
 		selectionMap = new JPanel();
 		treePanel = new JPanel();
+		
+		southPanel = new JPanel();
+		southPanel.setLayout(new BorderLayout());
 
 		setLayout(new BorderLayout());
 		add(loadPanel, BorderLayout.NORTH);
 		add(treePanel, BorderLayout.CENTER);
 		add(selectionMap, BorderLayout.SOUTH);
-		// add(message, BorderLayout.SOUTH);
+		southPanel.add(selectionMap, BorderLayout.NORTH);
+		southPanel.add(message, BorderLayout.SOUTH);
+		add(southPanel, BorderLayout.SOUTH);
 
 	}
 
