@@ -31,7 +31,6 @@ public class DecisionTreeID {
 	 */
 	private final List<List<String>> table = new ArrayList<>();
 	private Map<String, Set<String>> correspondenceVariable_Values; // An auxiliar variable
-	private final static Comparator<Double[]> comparatorGain = (m1, m2) -> m1[0].compareTo(m2[0]);
 	CSVParser parser;
 
 	public void learnID3(String ficheroCSV) throws FileNotFoundException {
@@ -146,7 +145,7 @@ public class DecisionTreeID {
 	 *            : What attributes should not be considered
 	 * @return node value or null
 	 */
-	private String leafNode(boolean[] cases, boolean[] attributes) {
+	private String leafNode(final boolean[] cases, final boolean[] attributes) {
 		Map<String, Integer> occurrences = new HashMap<>();
 		boolean isLeaf = true;
 		String current;
@@ -182,8 +181,15 @@ public class DecisionTreeID {
 	
 	public Object prediction(String[] input) {
 		Map<String,String> m = new HashMap<>();
-		IntStream.range(0, this.table.get(0).size()-1)
-		.forEach(j -> m.put(this.table.get(0).get(j), input[j]));
+		String variable;
+		for (int j=0; j<this.table.get(0).size()-1;j++) {
+			variable = this.table.get(0).get(j);
+			if (this.correspondenceVariable_Values.get(variable).contains(input[j])) {
+				m.put(variable, input[j]);
+			} else {
+				throw new RuntimeException("Value: "+input[j]+" not found.");
+			}
+		}
 		return prediction(m);
 	}
 	
@@ -232,8 +238,7 @@ public class DecisionTreeID {
 			values = values(i, row); // this might be troublesome
 			double total = 0; // number of cases to be considered
 			ganancias[i] = entropiaRes; // first value is target entropy
-
-			if (i != res) // if i is target, gain won't be calculated
+			if (i != res && !col[i]) // if i is target, gain won't be calculated
 			{
 				classAmount = new double[values.size()]; // for each variable value one class amount.
 
@@ -248,7 +253,6 @@ public class DecisionTreeID {
 				for (int j = 0; j < entropia.length; j++) {
 					ganancias[i] -= (classAmount[j] / total) * entropia[j];
 				}
-
 			}
 		}
 		int index = -1;
@@ -259,7 +263,6 @@ public class DecisionTreeID {
 				index = i;
 			}
 		}
-
 		return index;
 	}
 
@@ -291,13 +294,13 @@ public class DecisionTreeID {
 				entropia -= (classAmount[j] / total) * (Math.log(classAmount[j] / total) / Math.log(2));
 			else
 				entropia -= 0;
-			// el logaritmo tiene que ser base 2, no e. TODO
 		}
+		
 		return entropia;
 	}
 
 	public double[] entropia(int colRes, int col, boolean[] row, List<String> valuesRes) {
-		List<String> values = values(col, row);
+		List<String> values = values(col, row); // set containing values of var whose entropy is calculated
 		double[] entropia = new double[values.size()];
 		double[] total = new double[values.size()];
 		double[][] classAmount = new double[values.size()][valuesRes.size()];
@@ -305,18 +308,16 @@ public class DecisionTreeID {
 			if (!row[j]) {
 				classAmount[values.indexOf(table.get(j).get(col))][valuesRes.indexOf(table.get(j).get(colRes))]++;
 				total[values.indexOf(table.get(j).get(col))]++;
+				
 			}
 		}
 
 		for (int i = 0; i < classAmount.length; i++) {
-			for (int j = 0; j < classAmount[0].length; j++) {
-				if (classAmount[i][j] > 0)
+			for (int j = 0; j < classAmount[i].length; j++) {
+				if (classAmount[i][j] > 0) {
 					entropia[i] -= (classAmount[i][j] / total[i])
 							* (Math.log(classAmount[i][j] / total[i]) / Math.log(2));
-				else
-					entropia[i] -= 0;
-				// el logaritmo tiene que ser en base 2, no e. TODO
-
+				}
 			}
 		}
 

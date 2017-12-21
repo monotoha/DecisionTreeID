@@ -211,8 +211,4 @@ public class DecisionTreeIDCSVReaderTest {
 		}
 	}
 	
-	@Test
-	public void testReaderShouldGetTheCorrectTitanicTable() {
-		fail("Not yet implemented");
-	}
 }

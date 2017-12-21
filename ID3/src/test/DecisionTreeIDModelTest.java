@@ -13,14 +13,6 @@ import model.TaggedTree;
 
 public class DecisionTreeIDModelTest {
 
-	@Test
-	public void testFarmacoTreeCorrect() throws FileNotFoundException {
-		DecisionTreeID t = new DecisionTreeID();
-		TaggedTree<String> idealTree = buildTreeFarmaco();
-		t.learnID3("csv-files/farmaco.csv");
-		assertEquals(idealTree,t.getModel());
-		
-	}
 	
 	@Test
 	public void testTennisTreeCorrect() throws FileNotFoundException {
@@ -31,13 +23,41 @@ public class DecisionTreeIDModelTest {
 	}
 	
 	@Test
+	public void testClaseSitioCorrect() throws FileNotFoundException {
+		DecisionTreeID t = new DecisionTreeID();
+		TaggedTree<String> idealTree = buildTreeClaseSitio();
+		t.learnID3("csv-files/ClaseSitio.csv");
+		assertEquals(idealTree,t.getModel());
+	}
+	
+	/**
+	 * This example from: http://banzai-deim.urv.net/~riano/teaching/id3-m5.pdf
+	 * @return
+	 */
+	private TaggedTree<String> buildTreeClaseSitio() {
+		TaggedTree<String> aux1,aux2,aux3;
+		Map<String,TaggedTree<String>> map = new HashMap<>();
+		aux1 = new TaggedTree<>("bueno");
+		aux2 = new TaggedTree<>("malo");
+		aux3 = new TaggedTree<>("malo");
+		map.put("0", aux1);
+		map.put("1", aux2);
+		map.put("2", aux3);
+		aux2 = new TaggedTree<>("sitio de acceso",map);
+		aux1 = new TaggedTree<>("bueno");
+		aux3 = new TaggedTree<>("bueno");
+		map = new HashMap<>();
+		map.put("0", aux1);
+		map.put("1", aux2);
+		map.put("2", aux3);
+		return new TaggedTree<>("vivienda (zona)",map);
+	}
+
+	@Test
 	public void testSimpsonsTreeCorrect() throws FileNotFoundException {
 		DecisionTreeID t = new DecisionTreeID();
 		TaggedTree<String> idealTree = buildTreeSimpsons();
 		t.learnID3("csv-files/simpsons.csv");
-		System.out.println(idealTree);
-		System.out.println(t.getModel());
-		System.out.println(idealTree.equals(t.getModel()));
 		assertEquals(idealTree,t.getModel());
 	}
 	

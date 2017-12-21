@@ -32,7 +32,7 @@ public class DecisionTreeIDEntropyTest {
 		row[0] = true;
 		int indiceColesterolIndexVar = 2;
 		double[] val = t.entropia(list.get(0).size()-1,indiceColesterolIndexVar, row, t.values(list.get(0).size()-1, row));
-		double[] valEst = {0.918296,0.721928};
+		double[] valEst = {0.764204,0.9709505};
 		assertArrayEquals(valEst,val,0.0001);
 	}
 	
