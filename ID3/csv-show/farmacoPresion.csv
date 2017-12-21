@@ -1,0 +1,15 @@
+Azucar en sangre,Indice de colesterol,Alergia a antibioticos,Otras alergias,Administrar farmaco F,Presion alterial
+Alto,Alto,No,No,Si,Alta
+Alto,Alto,Si,No,Si,Alta
+Alto,Bajo,No,No,Si,Baja
+Alto,Alto,No,Si,No,Media
+Bajo,Alto,Si,Si,No,Media
+Bajo,Alto,Si,Si,Si,Baja
+Bajo,Alto,Si,No,Si,Alta
+Bajo,Bajo,No,Si,Si,Alta
+Alto,Bajo,Si,Si,No,Alta
+Bajo,Alto,Si,Si,Si,Baja
+Bajo,Alto,Si,Si,Si,Media
+Bajo,Bajo,Si,Si,No,Alta
+Alto,Alto,Si,Si,Si,Baja
+Alto,Bajo,No,No,Si,Baja
