@@ -58,9 +58,9 @@ public class ID3Controller implements ActionListener {
 					window.drawTree(decisionTree.getModel());
 					window.showSelectionMap(buildSelectionMenu());
 					
-				} catch (FileNotFoundException e1) {
+				} catch (FileNotFoundException | RuntimeException e1) {
 					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					System.out.println("Error con el archivo.");
 				}
 			}
 		} 
